@@ -42,10 +42,10 @@ d3.csv(url, function (err, data) {
 
 
     sexoChart
-            .width(200)
-            .height(200)
+            .width(300)
+            .height(300)
             .radius(100)
-            .innerRadius(30)
+            .innerRadius(20)
             .colors(colorScale)
             .dimension(generoDim)
             .group(generoDim.group()
@@ -67,14 +67,15 @@ d3.csv(url, function (err, data) {
     anoChart
             .width(500)
             .height(300)
+            .margins({top: 10, right: 50, bottom: 30, left: 40})
             .x(d3.scale.linear().domain([2009, 2017]))
             .brushOn(true)
             .yAxisLabel("Qtd")
             .xAxisLabel("Ano")
             .dimension(anoDim)
             .group(anoDim.group());
-    
-     topEscolasChart
+
+    topEscolasChart
             .width(500)
             .height(300)
             .x(d3.scale.linear().domain([2008, 2018]))
