@@ -3,9 +3,17 @@ var numporEstadoChart = dc.barChart("#numporEstadoChart");
 var sexoChart = dc.pieChart("#sexoChart");
 var tipoEscolaChart = dc.pieChart("#tipoEscolaChart");
 var localEscolaChart = dc.pieChart("#localEscolaChart");
-//var notaporDisciplinaChart = dc.barChart('#notaporDisciplinaChart');
+//var notaporDisciplinaChart = dc.compositeChart('#notaporDisciplinaChart');
+
+//nota media
+//var md_cnChart = dc.rowChart("#md_cnChart");
+//var md_chChart = dc.rowChart("#md_chChart");
+//var md_lcChart = dc.rowChart("#md_lcChart");
+//var md_mtChart = dc.rowChart("#md_mtChart");
+//var md_cn;
 
 var url = "base/enem-2009-16-escolas.csv";
+
 
 /** 
  nu_ano,co_escola,sg_uf_esc,co_municipio_esc,tp_sexo,tp_dependencia_adm_esc,tp_localizacao_esc,inscritos,md_cn,md_ch,md_lc,md_mt,md_red
@@ -98,24 +106,30 @@ d3.csv(url).then(function (data) {
                 return label;
             })
             .ordinalColors(d3.schemeSet2);
-//***      Numero de Participantes                       ****//
+
+    /**    Numero de Participantes                       **/
 
     var anoDim = ndx.dimension(ano => ano.nu_ano);
     var anoGroup = anoDim.group().reduceSum(function (d) {
         return d.inscritos;
     });
 
+    anoDimMax = anoGroup.top(1)[0].value;
+    console.log(anoDimMax)
+
     anoChart
-            .width(350)
+            .width(300)
             .height(200)
-            .margins({top: 10, right: 50, bottom: 30, left: 40})
+            .margins({top: 10, right: 20, bottom: 30, left: 50})
+            //.y(d3.scaleLinear().domain([0,anoDimMax]))
+            .elasticY(true)
             .x(d3.scaleBand().domain([2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]))
             .xUnits(dc.units.ordinal)
             .yAxisLabel("Qtd")
             .xAxisLabel("Ano")
             .dimension(anoDim)
             .group(anoGroup)
-    //.brushOn(true)
+            .ordinalColors(d3.schemeSet2);
 
 ////***      Numero de Participantes           por estado             ****//
 
@@ -127,17 +141,84 @@ d3.csv(url).then(function (data) {
     numporEstadoChart
             .width(600)
             .height(200)
-            .margins({top: 10, right: 10, bottom: 30, left: 40})
-            .x(d3.scaleBand().domain(['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
-                'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']))
+            .margins({top: 10, right: 20, bottom: 30, left: 50})
+            .x(d3.scaleBand().domain(numporestaDim))
             .xUnits(dc.units.ordinal)
+            .elasticY(true)
             .yAxisLabel("Qtd")
             .xAxisLabel("UF")
             .dimension(numporestaDim)
-            .group(numporestaGroup);
+            .group(numporestaGroup)
+            .ordinalColors(d3.schemeSet2);
 
 ////    /**        Media  Nota Objetiva        **/
 
+    var md_cnDim = ndx.dimension(nota => nota.md_cn);
+    var md_chDim = ndx.dimension(nota => nota.md_ch);
+    var md_lcDim = ndx.dimension(nota => nota.md_lc);
+    var md_mtDim = ndx.dimension(nota => nota.md_mt);
+
+    var md_cnGroup = md_cnDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
+    var md_chGroup = md_chDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
+    var md_lcGroup = md_lcDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
+    var md_mtGroup = md_mtDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
+
+    function reduceAdd(p, v) {
+        ++p.count;
+        p.total += v.value;
+        return p;
+    }
+
+    function reduceRemove(p, v) {
+        --p.count;
+        p.total -= v.value;
+        return p;
+    }
+
+    function reduceInitial() {
+        return {count: 0, total: 0};
+    }
+
+//    md_cnChart
+//            .dimension(md_cnDim)
+//            .group(md_cnGroup, "cd")
+//
+//    md_chChart
+//            .dimension(md_chDim)
+//            .group(md_chGroup, "ch")
+//
+//    md_lcChart
+//            .dimension(md_lcDim)
+//            .group(md_lcGroup, "lc")
+//
+//    md_mtChart
+//            .dimension(md_mtDim)
+//            .group(md_mtGroup, "mt")
+
+//    notaporDisciplinaChart
+//            .width(400)
+//            .height(250)
+//            .ordinalColors(d3.schemeSet2)
+//            .margins({top: 10, right: 10, bottom: 30, left: 40})
+//            .x(d3.scaleLinear().domain([300, 1000]))
+//            .y(d3.scaleOr)
+//            .compose([
+//                dc.rowChart(notaporDisciplinaChart)
+//                        .dimension(md_cnDim)
+//                        .group(md_cnGroup, "cd"),
+//
+//                dc.rowChart(notaporDisciplinaChart)
+//                        .dimension(md_chDim)
+//                        .group(md_chGroup, "ch"),
+//
+//                dc.rowChart(notaporDisciplinaChart)
+//                        .dimension(md_lcDim)
+//                        .group(md_lcGroup, "lc"),
+//
+//                dc.rowChart(notaporDisciplinaChart)
+//                        .dimension(md_mtDim)
+//                        .group(md_mtGroup, "mt"),
+//            ]);
 
 ////    /**        Media Geral Nota Redacao         **/
 
