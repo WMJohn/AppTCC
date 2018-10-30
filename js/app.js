@@ -1,8 +1,9 @@
 var anoChart = dc.barChart("#anoChart");
+var numporEstadoChart = dc.barChart("#numporEstadoChart");
 var sexoChart = dc.pieChart("#sexoChart");
 var tipoEscolaChart = dc.pieChart("#tipoEscolaChart");
 var localEscolaChart = dc.pieChart("#localEscolaChart");
-var mediaFinalChart = dc.row
+//var notaporDisciplinaChart = dc.barChart('#notaporDisciplinaChart');
 
 var url = "base/enem-2009-16-escolas.csv";
 
@@ -12,23 +13,19 @@ var url = "base/enem-2009-16-escolas.csv";
  2009,11000058,RO,1100205,M,4,1,56,620.2,615.7,558.3,605.7,650.9
  2009,11000198,RO,1100205,F,4,1,28,601.7,610.2,577.8,559.9,646.4
  **/
+dc.config.defaultColors(d3.schemeSet1)
 
-d3.csv(url, function (err, data) {
-
-    if (err)
-        throw err;
+d3.csv(url).then(function (data) {
 
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
 
-
+    var ndx2 = crossfilter(data);
+    var all2 = ndx2.groupAll();
 
     var mediaObjDim = ndx.dimension(function (d) {
         return d.md_cn + d.md_ch + d.md_lc + d.md_mt;
     });
-
-    var colorScale = d3.scale.ordinal().range(['#00adb5', '#f8b500', '#d34c26', '#f7de1c']);
-
 
     //*** Sexo charts  ***//
 
@@ -40,80 +37,109 @@ d3.csv(url, function (err, data) {
             .width(300)
             .height(250)
             .radius(100)
-            .innerRadius(10)
-            .colors(colorScale)
+            //   .colors()
             .dimension(generoDim)
             .group(generoDim.group())
-            .minAngleForLabel(0)
-            .on('pretransition', function (chart) {
-                chart.selectAll('text.pie-slice').text(function (d) {
-                    return d.data.key + ' ' + dc.utils.printSingleValue((d.endAngle - d.startAngle) / (2 * Math.PI) * 100) + '%';
-                })
-            });
+            .label(function (d) {
+                if (sexoChart.hasFilter() && !sexoChart.hasFilter(d.key)) {
+                    return d.key + '(0%)';
+                }
+                var label = d.key;
+                if (all.value()) {
+                    label += '(' + Math.floor(d.value / all.value() * 100) + '%)';
+                }
+                return label;
+            })
+            .ordinalColors(d3.schemeSet2);
 
-    /**    Tipo de escola **/
 
-    var tipoEscolaDim = ndx.dimension(function (d) {
-        return  d.tp_dependencia_adm_esc == 1 ? 'Fed' : d.tp_dependencia_adm_esc == 2 ? 'Est' : d.tp_dependencia_adm_esc == 3 ? 'Mun' : 'Par';
-    });
+//    /**    Tipo de Escola **/
+
+    var tipoEscolaDim = ndx.dimension(escola =>
+        escola.tp_dependencia_adm_esc == 1 ? 'Fed' : escola.tp_dependencia_adm_esc == 2 ? 'Est' : escola.tp_dependencia_adm_esc == 3 ? 'Mun' : 'Par');
 
     tipoEscolaChart
             .width(300)
             .height(250)
             .radius(100)
-            .innerRadius(10)
-            .colors(colorScale)
             .dimension(tipoEscolaDim)
             .group(tipoEscolaDim.group())
-            .minAngleForLabel(0)
-            .on('pretransition', function (chart) {
-                chart.selectAll('text.pie-slice').text(function (d) {
-                    return d.data.key + ' ' + dc.utils.printSingleValue((d.endAngle - d.startAngle) / (2 * Math.PI) * 100) + '%';
-                })
-            });
+            .label(function (d) {
+                if (tipoEscolaChart.hasFilter() && !tipoEscolaChart.hasFilter(d.key)) {
+                    return d.key + '(0%)';
+                }
+                var label = d.key;
+                if (all.value()) {
+                    label += '(' + Math.floor(d.value / all.value() * 100) + '%)';
+                }
+                return label;
+            })
+            .ordinalColors(d3.schemeSet2);
 
-    /**    local de escola **/
 
-    var localEscolaDim = ndx.dimension(function (d) {
-        return  d.tp_localizacao_esc == 1 ? 'Urbana' : 'Rural';
-    });
+    /**  local da Escola **/
+
+    var localEscolaDim = ndx.dimension(escola => escola.tp_localizacao_esc == 1 ? 'Urbana' : 'Rural');
 
     localEscolaChart
             .width(300)
             .height(250)
             .radius(100)
-            .innerRadius(10)
-            .colors(colorScale)
             .dimension(localEscolaDim)
             .group(localEscolaDim.group())
-            .minAngleForLabel(0)
-            .on('pretransition', function (chart) {
-                chart.selectAll('text.pie-slice').text(function (d) {
-                    return d.data.key + ' ' + dc.utils.printSingleValue((d.endAngle - d.startAngle) / (2 * Math.PI) * 100) + '%';
-                })
-            });
-
+            .label(function (d) {
+                if (localEscolaChart.hasFilter() && !localEscolaChart.hasFilter(d.key)) {
+                    return d.key + '(0%)';
+                }
+                var label = d.key;
+                if (all.value()) {
+                    label += '(' + Math.floor(d.value / all.value() * 100) + '%)';
+                }
+                return label;
+            })
+            .ordinalColors(d3.schemeSet2);
 //***      Numero de Participantes                       ****//
 
-    var anoDim = ndx.dimension(function (d) {
-        return d.nu_ano;
+    var anoDim = ndx.dimension(ano => ano.nu_ano);
+    var anoGroup = anoDim.group().reduceSum(function (d) {
+        return d.inscritos;
     });
 
-    var anoGroup = anoDim.group();
-
     anoChart
-            .width(500)
+            .width(350)
             .height(200)
             .margins({top: 10, right: 50, bottom: 30, left: 40})
-            .x(d3.scale.linear().domain([2009, 2017]))
-            .brushOn(true)
+            .x(d3.scaleBand().domain([2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]))
+            .xUnits(dc.units.ordinal)
             .yAxisLabel("Qtd")
             .xAxisLabel("Ano")
             .dimension(anoDim)
-            .group(anoDim.group());
+            .group(anoGroup)
+    //.brushOn(true)
 
-    /**        Media Geral Nota Objetiva        **/
-    /**        Media Geral Nota Redacao         **/
+////***      Numero de Participantes           por estado             ****//
+
+    var numporestaDim = ndx.dimension(uf => uf.sg_uf_esc);
+    var numporestaGroup = numporestaDim.group().reduceSum(function (d) {
+        return d.inscritos;
+    });
+
+    numporEstadoChart
+            .width(600)
+            .height(200)
+            .margins({top: 10, right: 10, bottom: 30, left: 40})
+            .x(d3.scaleBand().domain(['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
+                'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']))
+            .xUnits(dc.units.ordinal)
+            .yAxisLabel("Qtd")
+            .xAxisLabel("UF")
+            .dimension(numporestaDim)
+            .group(numporestaGroup);
+
+////    /**        Media  Nota Objetiva        **/
+
+
+////    /**        Media Geral Nota Redacao         **/
 
 
     dc.renderAll();

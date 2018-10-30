@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Microdados Enem</title>
+        <title>Microdados Enem - Anos 2009 à 2016</title>
         <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
         <link href="css/site.css" rel="stylesheet" type="text/css"/>
         <link href="css/dc.css" rel="stylesheet" type="text/css"/>
@@ -33,46 +33,54 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="row" id="participacao">
 
-                    <div class="row" id="participacao">
+                            <div id="sexoChart">
+                                <strong>Sexo Declarado</strong>
+                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                <a class="reset" href="javascript:sexoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
 
-                        <div id="sexoChart">
-                            <strong>Sexo Declarado</strong>
-                            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                            <a class="reset" href="javascript:gateNameChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                <div class="clearfix"></div>
+                            </div>
 
-                            <div class="clearfix"></div>
+
+                            <div id="tipoEscolaChart">
+                                <strong>Adismistração da Escola</strong>
+                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                <a class="reset" href="javascript:tipoEscolaChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div id="localEscolaChart">
+                                <strong>Local da Escola</strong>
+                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                <a class="reset" href="javascript:localEscolaChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+
+                                <div class="clearfix"></div>
+                            </div>
                         </div>
-                        
-                        <div id="tipoEscolaChart">
-                            <strong>Adismistração da Escola</strong>
-                            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                            <a class="reset" href="javascript:gateNameChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
 
-                            <div class="clearfix"></div>
+                        <div class="row">
+                            <div id="anoChart" class="col-4">
+                                <strong>Participação por Ano</strong>
+                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                <a class="reset" href="javascript:anoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                <div class="clearfix"></div>
+                            </div>      
+
+                            <div id="numporEstadoChart" class="col-8">
+                                <strong>Participação por Estado</strong>
+                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                <a class="reset" href="javascript:numporEstadoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                <div class="clearfix"></div>
+                            </div>  
                         </div>
-                        
-                          <div id="localEscolaChart">
-                            <strong>Local da Escola</strong>
-                            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                            <a class="reset" href="javascript:gateNameChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
 
-                            <div class="clearfix"></div>
-                        </div>
 
-                        <div id="anoChart">
-                            <strong>Participação por Ano</strong>
-                            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                            <a class="reset" href="javascript:anoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
-
-                            <div class="clearfix"></div>
-                        </div>                      
-
-                    </div>
-
-                    <table class="table table-hover dc-data-table">
-                    </table>
-                </div>                      
+                    </div>  
+                </div>              
             </main>
             <footer>
 
