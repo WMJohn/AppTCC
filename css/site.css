@@ -35,6 +35,7 @@ header ul{
 header li{list-style: none; display: inline; padding: 5px; margin: 0;}
 
 header li a{
+    font-size: 16px;
     text-decoration: none; color:#ffffff;
     transition: all 0.2s ease-out;
     -webkit-transition: all 0.2s ease-out;

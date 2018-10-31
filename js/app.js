@@ -3,17 +3,14 @@ var numporEstadoChart = dc.barChart("#numporEstadoChart");
 var sexoChart = dc.pieChart("#sexoChart");
 var tipoEscolaChart = dc.pieChart("#tipoEscolaChart");
 var localEscolaChart = dc.pieChart("#localEscolaChart");
-//var notaporDisciplinaChart = dc.compositeChart('#notaporDisciplinaChart');
-
 //nota media
-//var md_cnChart = dc.rowChart("#md_cnChart");
-//var md_chChart = dc.rowChart("#md_chChart");
-//var md_lcChart = dc.rowChart("#md_lcChart");
-//var md_mtChart = dc.rowChart("#md_mtChart");
-//var md_cn;
+var md_cnChart = dc.rowChart("#md_cnChart");
+var md_chChart = dc.rowChart("#md_chChart");
+var md_lcChart = dc.rowChart("#md_lcChart");
+var md_mtChart = dc.rowChart("#md_mtChart");
+var md_redChart = dc.rowChart("#md_redChart");
 
 var url = "base/enem-2009-16-escolas.csv";
-
 
 /** 
  nu_ano,co_escola,sg_uf_esc,co_municipio_esc,tp_sexo,tp_dependencia_adm_esc,tp_localizacao_esc,inscritos,md_cn,md_ch,md_lc,md_mt,md_red
@@ -151,74 +148,148 @@ d3.csv(url).then(function (data) {
             .group(numporestaGroup)
             .ordinalColors(d3.schemeSet2);
 
-////    /**        Media  Nota Objetiva        **/
+    /** **************  Media  das Notas  ******************** **/
 
-    var md_cnDim = ndx.dimension(nota => nota.md_cn);
-    var md_chDim = ndx.dimension(nota => nota.md_ch);
-    var md_lcDim = ndx.dimension(nota => nota.md_lc);
-    var md_mtDim = ndx.dimension(nota => nota.md_mt);
+//    var md_cnDim = ndx.dimension(nota => ["Ciência Naturais"]);
+//    var md_chDim = ndx.dimension(nota => ["Ciências Humanas"]);
+//    var md_lcDim = ndx.dimension(nota => ["Linguagens e Códigos"]);
+//    var md_mtDim = ndx.dimension(nota => ["Matemática"]);
+//    var md_redDim = ndx.dimension(nota => ["Redação"]);
 
-    var md_cnGroup = md_cnDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
-    var md_chGroup = md_chDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
-    var md_lcGroup = md_lcDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
-    var md_mtGroup = md_mtDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
+    var md_cnGroup = anoDim.group().reduce(reduceCNAdd, reduceCNRemove, reduceCNInitial)
+    var md_chGroup = anoDim.group().reduce(reduceCHAdd, reduceCHRemove, reduceCHInitial);
+    var md_lcGroup = anoDim.group().reduce(reduceLCAdd, reduceLCRemove, reduceLCInitial);
+    var md_mtGroup = anoDim.group().reduce(reduceMTAdd, reduceMTRemove, reduceMTInitial);
+    var md_redGroup = anoDim.group().reduce(reduceREDAdd, reduceREDRemove, reduceREDInitial);
 
-    function reduceAdd(p, v) {
+//reduce media CN  ---------------------------------------------------
+    function reduceCNAdd(p, v) {
         ++p.count;
-        p.total += v.value;
+        p.total += (v.md_cn) * 1;
+        Math.round(p)
         return p;
     }
-
-    function reduceRemove(p, v) {
+    function reduceCNRemove(p, v) {
         --p.count;
-        p.total -= v.value;
+        p.total -= (v.md_cn) * 1;
         return p;
     }
-
-    function reduceInitial() {
+    function reduceCNInitial() {
+        return {count: 0, total: 0};
+    }
+//reduce media CH -----------------------------------------------
+    function reduceCHAdd(p, v) {
+        ++p.count;
+        p.total += (v.md_ch) * 1;
+        //console.log(p.total)
+        return p;
+    }
+    function reduceCHRemove(p, v) {
+        --p.count;
+        p.total -= (v.md_ch) * 1;
+        return p;
+    }
+    function reduceCHInitial() {
+        return {count: 0, total: 0};
+    }
+//reduce media LC ------------------------------------------------
+    function reduceLCAdd(p, v) {
+        ++p.count;
+        p.total += (v.md_lc) * 1;
+        //console.log(p.total)
+        return p;
+    }
+    function reduceLCRemove(p, v) {
+        --p.count;
+        p.total -= (v.md_lc) * 1;
+        return p;
+    }
+    function reduceLCInitial() {
+        return {count: 0, total: 0};
+    }
+//reduce media MT ------------------------------------------------
+    function reduceMTAdd(p, v) {
+        ++p.count;
+        p.total += (v.md_mt) * 1;
+        //console.log(p.total)
+        return p;
+    }
+    function reduceMTRemove(p, v) {
+        --p.count;
+        p.total -= (v.md_mt) * 1;
+        return p;
+    }
+    function reduceMTInitial() {
+        return {count: 0, total: 0};
+    }
+//reduce media RED ------------------------------------------------
+    function reduceREDAdd(p, v) {
+        ++p.count;
+        p.total += (v.md_red) * 1;
+        //console.log(p.total)
+        return p;
+    }
+    function reduceREDRemove(p, v) {
+        --p.count;
+        p.total -= (v.md_red) * 1;
+        return p;
+    }
+    function reduceREDInitial() {
         return {count: 0, total: 0};
     }
 
-//    md_cnChart
-//            .dimension(md_cnDim)
-//            .group(md_cnGroup, "cd")
-//
-//    md_chChart
-//            .dimension(md_chDim)
-//            .group(md_chGroup, "ch")
-//
-//    md_lcChart
-//            .dimension(md_lcDim)
-//            .group(md_lcGroup, "lc")
-//
-//    md_mtChart
-//            .dimension(md_mtDim)
-//            .group(md_mtGroup, "mt")
+    md_cnChart
+            .width(300)
+            .height(200)
+            .dimension(anoDim)
+            .group(md_cnGroup)
+            .x(d3.scaleLinear().domain([300, 1000]))
+            .elasticX(true)
+            .valueAccessor(function (p) {
+                return p.value.count > 0 ? p.value.total / p.value.count : 0;
+            });
 
-//    notaporDisciplinaChart
-//            .width(400)
-//            .height(250)
-//            .ordinalColors(d3.schemeSet2)
-//            .margins({top: 10, right: 10, bottom: 30, left: 40})
-//            .x(d3.scaleLinear().domain([300, 1000]))
-//            .y(d3.scaleOr)
-//            .compose([
-//                dc.rowChart(notaporDisciplinaChart)
-//                        .dimension(md_cnDim)
-//                        .group(md_cnGroup, "cd"),
-//
-//                dc.rowChart(notaporDisciplinaChart)
-//                        .dimension(md_chDim)
-//                        .group(md_chGroup, "ch"),
-//
-//                dc.rowChart(notaporDisciplinaChart)
-//                        .dimension(md_lcDim)
-//                        .group(md_lcGroup, "lc"),
-//
-//                dc.rowChart(notaporDisciplinaChart)
-//                        .dimension(md_mtDim)
-//                        .group(md_mtGroup, "mt"),
-//            ]);
+    md_chChart
+            .width(300)
+            .height(200)
+            .dimension(anoDim)
+            .group(md_chGroup, '1')
+            .x(d3.scaleLinear().domain([300, 1000]))
+            .elasticX(true)
+            .valueAccessor(function (p) {
+                return p.value.count > 0 ? p.value.total / p.value.count : 0;
+            });
+    md_lcChart
+            .width(300)
+            .height(200)
+            .dimension(anoDim)
+            .group(md_lcGroup, '1')
+            .x(d3.scaleLinear().domain([300, 1000]))
+            .elasticX(true)
+            .valueAccessor(function (p) {
+                return p.value.count > 0 ? p.value.total / p.value.count : 0;
+            });
+    md_mtChart
+           .width(450)
+            .height(200)
+            .dimension(anoDim)
+            .group(md_mtGroup, '1')
+            .x(d3.scaleOrdinal().domain([300, 1000]))
+            .elasticX(true)
+            .valueAccessor(function (p) {
+                return p.value.count > 0 ? p.value.total / p.value.count : 0;
+            });
+    md_redChart
+            .width(450)
+            .height(200)
+            .dimension(anoDim)
+            .group(md_redGroup, '1')
+            .x(d3.scaleLinear().domain(["teste"]))
+            .elasticX(true)
+            .valueAccessor(function (p) {
+                return p.value.count > 0 ? p.value.total / p.value.count : 0;
+            });
+
 
 ////    /**        Media Geral Nota Redacao         **/
 
