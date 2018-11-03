@@ -25,13 +25,6 @@ d3.csv(url).then(function (data) {
     var ndx = crossfilter(data);
     var all = ndx.groupAll();
 
-    var ndx2 = crossfilter(data);
-    var all2 = ndx2.groupAll();
-
-    var mediaObjDim = ndx.dimension(function (d) {
-        return d.md_cn + d.md_ch + d.md_lc + d.md_mt;
-    });
-
     //*** Sexo charts  ***//
 
     var generoDim = ndx.dimension(function (d) {
@@ -150,17 +143,43 @@ d3.csv(url).then(function (data) {
 
     /** **************  Media  das Notas  ******************** **/
 
-//    var md_cnDim = ndx.dimension(nota => ["Ciência Naturais"]);
-//    var md_chDim = ndx.dimension(nota => ["Ciências Humanas"]);
-//    var md_lcDim = ndx.dimension(nota => ["Linguagens e Códigos"]);
-//    var md_mtDim = ndx.dimension(nota => ["Matemática"]);
-//    var md_redDim = ndx.dimension(nota => ["Redação"]);
-
     var md_cnGroup = anoDim.group().reduce(reduceCNAdd, reduceCNRemove, reduceCNInitial)
     var md_chGroup = anoDim.group().reduce(reduceCHAdd, reduceCHRemove, reduceCHInitial);
     var md_lcGroup = anoDim.group().reduce(reduceLCAdd, reduceLCRemove, reduceLCInitial);
     var md_mtGroup = anoDim.group().reduce(reduceMTAdd, reduceMTRemove, reduceMTInitial);
     var md_redGroup = anoDim.group().reduce(reduceREDAdd, reduceREDRemove, reduceREDInitial);
+
+//    var mediaObjDim = ndx.dimension(nota => {
+//        somaObj = (nota.md_cnDim * 1.0) + (nota.md_chDim * 1.0) + (nota.md_lcDim * 1.0) + (nota.md_mtDim * 1.0);
+//        
+//        if (somaObj <= 250) {
+//            return 'Grupo_1';
+//        } else if (somaObj <= 500) {
+//            return 'Grupo_2';
+//        } else if (somaObj <= 750) {
+//            return 'Grupo_3';
+//        } else  {
+//            return 'Grupo_4' ;
+//        }
+//    });
+//    
+//     var mediaObjGroup = mediaObjDim.group().reduce(reduceMedObjAdd, reduceMedObjRemove, reduceMedObjInitial)
+
+////reduce media Provas OBjetivas  ---------------------------------------------------
+//    function reduceMedObjAdd(p, v) {
+//        ++p.count;
+//        p.total += (v.md_cnDim * 1.0) + (v.md_chDim * 1.0) + (v.md_lcDim * 1.0) + (v.md_mtDim * 1.0);
+//        Math.round(p)
+//        return p;
+//    }
+//    function reduceMedObjRemove(p, v) {
+//        --p.count;
+//        p.total -= (v.md_cnDim * 1.0) + (v.md_chDim * 1.0) + (v.md_lcDim * 1.0) + (v.md_mtDim * 1.0);
+//        return p;
+//    }
+//    function reduceMedObjInitial() {
+//        return {count: 0, total: 0};
+//    }
 
 //reduce media CN  ---------------------------------------------------
     function reduceCNAdd(p, v) {
@@ -241,9 +260,10 @@ d3.csv(url).then(function (data) {
     md_cnChart
             .width(300)
             .height(200)
+            .ordinalColors(d3.schemeSet2)
             .dimension(anoDim)
-            .group(md_cnGroup)
-            .x(d3.scaleLinear().domain([300, 1000]))
+            .group(md_cnGroup, '1')
+            .x(d3.scaleOrdinal().domain([300, 1000]))
             .elasticX(true)
             .valueAccessor(function (p) {
                 return p.value.count > 0 ? p.value.total / p.value.count : 0;
@@ -252,6 +272,7 @@ d3.csv(url).then(function (data) {
     md_chChart
             .width(300)
             .height(200)
+            .ordinalColors(d3.schemeSet2)
             .dimension(anoDim)
             .group(md_chGroup, '1')
             .x(d3.scaleLinear().domain([300, 1000]))
@@ -262,6 +283,7 @@ d3.csv(url).then(function (data) {
     md_lcChart
             .width(300)
             .height(200)
+            .ordinalColors(d3.schemeSet2)
             .dimension(anoDim)
             .group(md_lcGroup, '1')
             .x(d3.scaleLinear().domain([300, 1000]))
@@ -270,8 +292,9 @@ d3.csv(url).then(function (data) {
                 return p.value.count > 0 ? p.value.total / p.value.count : 0;
             });
     md_mtChart
-           .width(450)
+            .width(450)
             .height(200)
+            .ordinalColors(d3.schemeSet2)
             .dimension(anoDim)
             .group(md_mtGroup, '1')
             .x(d3.scaleOrdinal().domain([300, 1000]))
@@ -282,6 +305,7 @@ d3.csv(url).then(function (data) {
     md_redChart
             .width(450)
             .height(200)
+            .ordinalColors(d3.schemeSet2)
             .dimension(anoDim)
             .group(md_redGroup, '1')
             .x(d3.scaleLinear().domain(["teste"]))
@@ -292,7 +316,5 @@ d3.csv(url).then(function (data) {
 
 
 ////    /**        Media Geral Nota Redacao         **/
-
-
     dc.renderAll();
 });

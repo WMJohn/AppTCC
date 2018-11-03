@@ -8,6 +8,8 @@ and open the template in the editor.
     Author     : Johnson
 */
 
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
+
 body {
     background-color: #eaeaea;
     background-attachment: fixed;
@@ -35,7 +37,8 @@ header ul{
 header li{list-style: none; display: inline; padding: 5px; margin: 0;}
 
 header li a{
-    font-size: 16px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 20px;
     text-decoration: none; color:#ffffff;
     transition: all 0.2s ease-out;
     -webkit-transition: all 0.2s ease-out;
@@ -58,5 +61,12 @@ main {
 
 .container {
     padding-top: 20px;
+    min-height: 600px;
+}
+
+.dadosEnem {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 16px;
+    text-align: justify;
 }
 
