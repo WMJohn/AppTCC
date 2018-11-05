@@ -35,7 +35,7 @@ d3.csv(url).then(function (data) {
     var ndx = crossfilter(data);
     var ndx2 = crossfilter(data);
     var all = ndx.groupAll();
-    var all2 = ndx.groupAll2();
+    var all2 = ndx2.groupAll();
 
 
 // escutar cod escola
@@ -423,7 +423,6 @@ d3.csv(url).then(function (data) {
             .height(200)
             .margins({top: 10, right: 20, bottom: 30, left: 50})
             .x(d3.scaleOrdinal())
-            .y(d3.scaleLinear().domain([450, 550]))
             .elasticY(true)
             .xUnits(dc.units.ordinal)
             .yAxisLabel("Decay %")
