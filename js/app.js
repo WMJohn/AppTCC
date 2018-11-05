@@ -25,12 +25,29 @@ var url = "base/enem-2009-16-escolas.csv";
 
 // ifpa 15588947
 
+var codEscola;
+
+
 dc.config.defaultColors(d3.schemeSet2)
 
 d3.csv(url).then(function (data) {
 
     var ndx = crossfilter(data);
+    var ndx2 = crossfilter(data);
     var all = ndx.groupAll();
+    var all2 = ndx.groupAll2();
+
+
+// escutar cod escola
+    var escolaDim = ndx.dimension(escola => escola.co_escola)
+
+    function myFunction() {
+        codEscola = document.getElementById("codEscola").value
+        console.log(codEscola)
+        escolaDim.filter(codEscola);
+    }
+
+    document.getElementById("myBtn").addEventListener("click", myFunction);
 
     //*** Sexo charts  ***//
 
@@ -42,7 +59,6 @@ d3.csv(url).then(function (data) {
             .width(300)
             .height(250)
             .radius(100)
-            //   .colors()
             .dimension(generoDim)
             .group(generoDim.group())
             .label(function (d) {
@@ -336,9 +352,8 @@ d3.csv(url).then(function (data) {
                 }
                 var label = d.key;
                 if (all.value()) {
-                    label += ' (' + (d.value.total/d.value.count).toFixed(2)  + ')';
+                    label += ' (' + (d.value.total / d.value.count).toFixed(2) + ')';
                 }
-                console.log(d.value)
                 return label;
             })
     md_objChart
@@ -358,13 +373,10 @@ d3.csv(url).then(function (data) {
                 }
                 var label = d.key;
                 if (all.value()) {
-                    label += ' (' + (d.value.total/d.value.count).toFixed(2) + ')';
+                    label += ' (' + (d.value.total / d.value.count).toFixed(2) + ')';
                 }
-                console.log(d.value)
                 return label;
             })
-
-
 
 //// 
 
@@ -397,7 +409,7 @@ d3.csv(url).then(function (data) {
             .yAxisLabel("Decay %")
             .dimension(anoDim)
             .valueAccessor(function (d) {
-                return (d.value.total/d.value.count)
+                return (d.value.total / d.value.count)
             })
             .group(notaPorGrupoGroup)
             .on('renderlet', function (chart) {
@@ -411,13 +423,13 @@ d3.csv(url).then(function (data) {
             .height(200)
             .margins({top: 10, right: 20, bottom: 30, left: 50})
             .x(d3.scaleOrdinal())
+            .y(d3.scaleLinear().domain([450, 550]))
             .elasticY(true)
             .xUnits(dc.units.ordinal)
             .yAxisLabel("Decay %")
             .dimension(anoDim)
             .valueAccessor(function (d) {
-                console.log(d)
-                return (d.value.total/d.value.count)
+                return (d.value.total / d.value.count)
             })
             .group(notaPorGrupoGroup)
             .on('renderlet', function (chart) {
