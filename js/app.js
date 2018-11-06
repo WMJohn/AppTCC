@@ -4,17 +4,14 @@ var sexoChart = dc.pieChart("#sexoChart");
 var tipoEscolaChart = dc.pieChart("#tipoEscolaChart");
 var localEscolaChart = dc.pieChart("#localEscolaChart");
 //nota media
-//var md_cnChart = dc.rowChart("#md_cnChart");
-//var md_chChart = dc.rowChart("#md_chChart");
-//var md_lcChart = dc.rowChart("#md_lcChart");
-//var md_mtChart = dc.rowChart("#md_mtChart");
 var md_redChart = dc.rowChart("#md_redChart");
 var md_objChart = dc.rowChart("#md_objChart");
 //linechart
 var evoLineObjChart = dc.lineChart("#evoLineObjChart")
 var evoLineRedChart = dc.lineChart("#evoLineRedChart")
 
-var url = "base/enem-2009-16-escolas.csv";
+// var url = "base/enem-2009-16-escolas.csv";
+var url = "https://raw.githubusercontent.com/cmartins-ifpa/educ-br/master/datasets/enem-2009-16-escolas.csv";
 
 /** 
  nu_ano,co_escola,sg_uf_esc,co_municipio_esc,tp_sexo,tp_dependencia_adm_esc,tp_localizacao_esc,inscritos,md_cn,md_ch,md_lc,md_mt,md_red
@@ -172,33 +169,7 @@ d3.csv(url).then(function (data) {
 
     /** **************  Media  das Notas  ******************** **/
 
-//    var md_cnGroup = anoDim.group().reduce(reduceCNAdd, reduceCNRemove, reduceCNInitial)
-//    var md_chGroup = anoDim.group().reduce(reduceCHAdd, reduceCHRemove, reduceCHInitial);
-//    var md_lcGroup = anoDim.group().reduce(reduceLCAdd, reduceLCRemove, reduceLCInitial);
-//    var md_mtGroup = anoDim.group().reduce(reduceMTAdd, reduceMTRemove, reduceMTInitial);
     var md_redGroup = anoDim.group().reduce(reduceREDAdd, reduceREDRemove, reduceREDInitial);
-
-//    var notaPorGrupoDim = ndx.dimension(nota => {
-//        
-//        somaObj = (parseFloat(nota.md_cn) + parseFloat(nota.md_ch) + parseFloat(nota.md_lc) + parseFloat(nota.md_mt)) / 4;
-//
-//        if (parseFloat(somaObj) <= 250) {
-//            return 'Grupo_1 <= 250';
-//        } else if (parseFloat(somaObj) <= 500) {
-//            return 'Grupo_2 <= 500';
-//        } else if (parseFloat(somaObj) <= 750) {
-//            return 'Grupo_3 <= 750';
-//        } else  {
-//            return 'Grupo_4 > 750' ;
-//        }
-//        
-//    });
-//        
-//     var notaPorGrupoGroup =  notaPorGrupoDim.group().reduceSum(function (d) {
-//        return d.inscritos;
-//    });
-
-
     var notaPorGrupoGroup = anoDim.group().reduce(reduceMedObjAdd, reduceMedObjRemove, reduceMedObjInitial)
 
 ////reduce media Provas OBjetivas  ---------------------------------------------------
@@ -215,66 +186,7 @@ d3.csv(url).then(function (data) {
     function reduceMedObjInitial() {
         return {count: 0, total: 0};
     }
-////reduce media CN  ---------------------------------------------------
-//    function reduceCNAdd(p, v) {
-//        ++p.count;
-//        p.total += parseFloat(v.md_cn);
-//        Math.round(p)
-//        return p;
-//    }
-//    function reduceCNRemove(p, v) {
-//        --p.count;
-//        p.total -= parseFloat(v.md_cn);
-//        return p;
-//    }
-//    function reduceCNInitial() {
-//        return {count: 0, total: 0};
-//    }
-////reduce media CH -----------------------------------------------
-//    function reduceCHAdd(p, v) {
-//        ++p.count;
-//        p.total += parseFloat(v.md_ch);
-//        //console.log(p.total)
-//        return p;
-//    }
-//    function reduceCHRemove(p, v) {
-//        --p.count;
-//        p.total -= parseFloat(v.md_ch);
-//        return p;
-//    }
-//    function reduceCHInitial() {
-//        return {count: 0, total: 0};
-//    }
-////reduce media LC ------------------------------------------------
-//    function reduceLCAdd(p, v) {
-//        ++p.count;
-//        p.total += (v.md_lc) * 1;
-//        //console.log(p.total)
-//        return p;
-//    }
-//    function reduceLCRemove(p, v) {
-//        --p.count;
-//        p.total -= (v.md_lc) * 1;
-//        return p;
-//    }
-//    function reduceLCInitial() {
-//        return {count: 0, total: 0};
-//    }
-////reduce media MT ------------------------------------------------
-//    function reduceMTAdd(p, v) {
-//        ++p.count;
-//        p.total += (v.md_mt) * 1;
-//        //console.log(p.total)
-//        return p;
-//    }
-//    function reduceMTRemove(p, v) {
-//        --p.count;
-//        p.total -= (v.md_mt) * 1;
-//        return p;
-//    }
-//    function reduceMTInitial() {
-//        return {count: 0, total: 0};
-//    }
+
 //reduce media RED ------------------------------------------------
     function reduceREDAdd(p, v) {
         ++p.count;
@@ -291,50 +203,6 @@ d3.csv(url).then(function (data) {
         return {count: 0, total: 0};
     }
 
-//    md_cnChart
-//            .width(300)
-//            .height(200)
-//            .ordinalColors(d3.schemeSet2)
-//            .dimension(anoDim)
-//            .group(notaPorGrupoGroup)
-//            //.x(d3.scaleOrdinal().domain([0, maxPart]))
-//            .elasticX(true)
-//            .valueAccessor(function (p) {
-//                return p.value.count > 0 ? p.value.total / p.value.count : 0;
-//            })
-//    md_chChart
-//            .width(300)
-//            .height(200)
-//            .ordinalColors(d3.schemeSet2)
-//            .dimension(anoDim)
-//            .group(md_chGroup, '2')
-//            .x(d3.scaleLinear().domain([300, 1000]))
-//            .elasticX(true)
-//            .valueAccessor(function (p) {
-//                return p.value.count > 0 ? p.value.total / p.value.count : 0;
-//            });
-//    md_lcChart
-//            .width(300)
-//            .height(200)
-//            .ordinalColors(d3.schemeSet2)
-//            .dimension(anoDim)
-//            .group(md_lcGroup, '3')
-//            .x(d3.scaleLinear().domain([300, 1000]))
-//            .elasticX(true)
-//            .valueAccessor(function (p) {
-//                return p.value.count > 0 ? p.value.total / p.value.count : 0;
-//            });
-//    md_mtChart
-//            .width(450)
-//            .height(200)
-//            .ordinalColors(d3.schemeSet2)
-//            .dimension(anoDim)
-//            .group(md_mtGroup, '4')
-//            .x(d3.scaleOrdinal().domain([300, 1000]))
-//            .elasticX(true)
-//            .valueAccessor(function (p) {
-//                return p.value.count > 0 ? p.value.total / p.value.count : 0;
-//            });
     md_redChart
             .width(450)
             .height(200)
@@ -430,7 +298,7 @@ d3.csv(url).then(function (data) {
             .valueAccessor(function (d) {
                 return (d.value.total / d.value.count)
             })
-            .group(notaPorGrupoGroup)
+            .group(md_redGroup)
             .on('renderlet', function (chart) {
                 chart.selectAll('rect').on("click", function (d) {
                     console.log("click!", d);
