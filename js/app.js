@@ -74,15 +74,15 @@ d3.csv(url).then(function (data) {
 
 //    /**    Tipo de Escola **/
 
-    var tipoEscolaDim = ndx.dimension(escola =>
+    var tipoAdmEscolaDim = ndx.dimension(escola =>
         escola.tp_dependencia_adm_esc == 1 ? 'Fed' : escola.tp_dependencia_adm_esc == 2 ? 'Est' : escola.tp_dependencia_adm_esc == 3 ? 'Mun' : 'Par');
 
     tipoEscolaChart
             .width(300)
             .height(250)
             .radius(100)
-            .dimension(tipoEscolaDim)
-            .group(tipoEscolaDim.group())
+            .dimension(tipoAdmEscolaDim)
+            .group(tipoAdmEscolaDim.group())
             .label(function (d) {
                 if (tipoEscolaChart.hasFilter() && !tipoEscolaChart.hasFilter(d.key)) {
                     return d.key + '(0%)';
@@ -271,7 +271,7 @@ d3.csv(url).then(function (data) {
             .width(450)
             .height(200)
             .margins({top: 10, right: 20, bottom: 30, left: 50})
-            .x(d3.scaleOrdinal())
+            .x(d3.scaleBand())
             .elasticY(true)
             .xUnits(dc.units.ordinal)
             .yAxisLabel("Decay %")
@@ -290,7 +290,7 @@ d3.csv(url).then(function (data) {
             .width(450)
             .height(200)
             .margins({top: 10, right: 20, bottom: 30, left: 50})
-            .x(d3.scaleOrdinal())
+            .x(d3.scaleBand())
             .elasticY(true)
             .xUnits(dc.units.ordinal)
             .yAxisLabel("Decay %")
