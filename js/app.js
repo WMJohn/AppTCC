@@ -39,9 +39,22 @@ d3.csv(url).then(function (data) {
     var escolaDim = ndx.dimension(escola => escola.co_escola)
 
     function myFunction() {
+        existe = false;
         codEscola = document.getElementById("codEscola").value
-        console.log(codEscola)
-        escolaDim.filter(codEscola);
+        escolaDim.top(Infinity).forEach(function (element) {
+            if (element.co_escola == codEscola) {
+                existe = true;
+            }
+        });
+        if (existe) {
+            escolaDim.filter(codEscola);
+            dc.renderAll();
+            return;
+        } else {
+            escolaDim.filter(null)
+            dc.renderAll();
+            window.alert("Escola não encontrada")
+        }
     }
 
     document.getElementById("myBtn").addEventListener("click", myFunction);
