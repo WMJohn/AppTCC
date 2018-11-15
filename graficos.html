@@ -46,7 +46,7 @@
 
 
                             <div id="tipoEscolaChart">
-                                <strong>Adismistração da Escola</strong>
+                                <strong>Administração da Escola</strong>
                                 <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
                                 <a class="reset" href="javascript:tipoEscolaChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
 
@@ -64,14 +64,14 @@
 
                         <div class="row">
                             <div id="anoChart" class="col-4">
-                                <strong>Participação por Ano</strong>
+                                <strong>Numero de concluintes a cada ano.</strong>
                                 <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
                                 <a class="reset" href="javascript:anoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
                                 <div class="clearfix"></div>
                             </div>      
 
                             <div id="numporEstadoChart" class="col-8">
-                                <strong>Participação por Estado</strong>
+                                <strong>Numero de concluintes a Por Estado</strong>
                                 <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
                                 <a class="reset" href="javascript:numporEstadoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
                                 <div class="clearfix"></div>
@@ -79,9 +79,10 @@
                         </div>
 
                         <div class="row">
-                            <label>Entre com o Codigo da escola</label>
-                            <input id="codEscola" type="number">
-                            <button id="myBtn" type="button" style="margin-bottom: 8px;">Entrar</button> <span> Exemplo: IFPA = 15588947</span>
+                            <label>Entre com o Codigo da escola <span style="font-size: 10px"> ( Exemplo: IFPA = 15588947 ) </span></label>
+                            <input id="codEscola" type="number">                            
+                            <button id="btnEntrar" type="button" style="margin-bottom: 8px;" class="btn btn-primary">Entrar</button> 
+                            <button id="btnLimpar" type="button" style="margin-bottom: 8px;" class="btn btn-danger">Limpar</button> 
                         </div>
 
                         <div class="row">

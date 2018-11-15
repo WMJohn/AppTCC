@@ -11,7 +11,8 @@ var evoLineObjChart = dc.lineChart("#evoLineObjChart")
 var evoLineRedChart = dc.lineChart("#evoLineRedChart")
 
 // var url = "base/enem-2009-16-escolas.csv";
-var url = "https://raw.githubusercontent.com/cmartins-ifpa/educ-br/master/datasets/enem-2009-16-escolas.csv";
+
+dc.config.defaultColors(d3.schemeSet2)
 
 /** 
  nu_ano,co_escola,sg_uf_esc,co_municipio_esc,tp_sexo,tp_dependencia_adm_esc,tp_localizacao_esc,inscritos,md_cn,md_ch,md_lc,md_mt,md_red
@@ -24,21 +25,18 @@ var url = "https://raw.githubusercontent.com/cmartins-ifpa/educ-br/master/datase
 
 var codEscola;
 
-
-dc.config.defaultColors(d3.schemeSet2)
+var url = "https://raw.githubusercontent.com/cmartins-ifpa/educ-br/master/datasets/enem-2009-16-escolas.csv";
 
 d3.csv(url).then(function (data) {
 
     var ndx = crossfilter(data);
-    var ndx2 = crossfilter(data);
     var all = ndx.groupAll();
-    var all2 = ndx2.groupAll();
-
 
 // escutar cod escola
     var escolaDim = ndx.dimension(escola => escola.co_escola)
 
-    function myFunction() {
+
+    function setEscolaCod() {
         existe = false;
         codEscola = document.getElementById("codEscola").value
         escolaDim.top(Infinity).forEach(function (element) {
@@ -57,12 +55,22 @@ d3.csv(url).then(function (data) {
         }
     }
 
-    document.getElementById("myBtn").addEventListener("click", myFunction);
+    function clearEscolaCod() {
+        escolaDim.filter(null)
+        dc.renderAll()
+    }
+
+    document.getElementById("btnEntrar").addEventListener("click", setEscolaCod);
+    document.getElementById("btnLimpar").addEventListener("click", clearEscolaCod);
 
     //*** Sexo charts  ***//
 
     var generoDim = ndx.dimension(function (d) {
         return  d.tp_sexo === "M" ? 'Masc.' : 'Femi.';
+    });
+
+    var generoGroup = generoDim.group().reduceSum(function (d) {
+        return d.inscritos;
     });
 
     sexoChart
@@ -144,7 +152,7 @@ d3.csv(url).then(function (data) {
     anoChart
             .width(300)
             .height(200)
-            .margins({top: 10, right: 20, bottom: 30, left: 50})
+            .margins({top: 10, right: 30, bottom: 30, left: 50})
             //.y(d3.scaleLinear().domain([0,anoDimMax]))
             .elasticY(true)
             .x(d3.scaleBand().domain([2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]))
@@ -165,7 +173,7 @@ d3.csv(url).then(function (data) {
     numporEstadoChart
             .width(600)
             .height(200)
-            .margins({top: 10, right: 20, bottom: 30, left: 50})
+            .margins({top: 10, right: 30, bottom: 30, left: 50})
             .x(d3.scaleBand().domain(numporestaDim))
             .xUnits(dc.units.ordinal)
             .elasticY(true)
@@ -287,7 +295,7 @@ d3.csv(url).then(function (data) {
             .x(d3.scaleBand())
             .elasticY(true)
             .xUnits(dc.units.ordinal)
-            .yAxisLabel("Decay %")
+            .yAxisLabel("Nota Media")
             .dimension(anoDim)
             .valueAccessor(function (d) {
                 return (d.value.total / d.value.count)
@@ -306,7 +314,7 @@ d3.csv(url).then(function (data) {
             .x(d3.scaleBand())
             .elasticY(true)
             .xUnits(dc.units.ordinal)
-            .yAxisLabel("Decay %")
+            .yAxisLabel("Nota Media")
             .dimension(anoDim)
             .valueAccessor(function (d) {
                 return (d.value.total / d.value.count)
