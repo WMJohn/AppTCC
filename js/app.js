@@ -25,7 +25,7 @@ dc.config.defaultColors(d3.schemeSet2)
 
 var codEscola;
 
-var url = "https://raw.githubusercontent.com/cmartins-ifpa/educ-br/master/datasets/enem-2009-16-escolas.csv";
+var url = "https://raw.githubusercontent.com/cmartins-ifpa/educ-br/master/datasets/enem-2009-17-escolas.csv";
 
 d3.csv(url).then(function (data) {
 
@@ -150,18 +150,25 @@ d3.csv(url).then(function (data) {
 
 
     anoChart
-            .width(300)
+            .width(400)
             .height(200)
-            .margins({top: 10, right: 30, bottom: 30, left: 50})
+            .margins({top: 10, right: 20, bottom: 30, left: 80})
             //.y(d3.scaleLinear().domain([0,anoDimMax]))
             .elasticY(true)
-            .x(d3.scaleBand().domain([2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]))
+            //.x(d3.scaleBand().domain([2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017]))
+            .x(d3.scaleBand())    // USEI A ESCALA A PARTIR DOS DADOS DOS ANOS 
             .xUnits(dc.units.ordinal)
             .yAxisLabel("Qtd")
-            .xAxisLabel("Ano")
+            // .xAxisLabel("Ano")
             .dimension(anoDim)
             .group(anoGroup)
-            .ordinalColors(d3.schemeCategory10);
+            .ordinalColors(d3.schemeCategory10)
+            .renderlet(function (chart) {      // POSICIONA O LABEL DO EIXO X
+                chart.selectAll("g.x text")
+                        .attr('dx', '-2')       // distancia do eixo
+                        .attr('transform', 'translate(-10,10) rotate(315)')   // deixa inclinado
+            })
+            ;
 
 ////***      Numero de Participantes           por estado             ****//
 
@@ -171,9 +178,9 @@ d3.csv(url).then(function (data) {
     });
 
     numporEstadoChart
-            .width(600)
-            .height(200)
-            .margins({top: 10, right: 30, bottom: 30, left: 50})
+            .width(700)
+            .height(210)
+            .margins({top: 10, right: 30, bottom: 30, left: 80})
             .x(d3.scaleBand().domain(numporestaDim))
             .xUnits(dc.units.ordinal)
             .elasticY(true)
@@ -225,47 +232,42 @@ d3.csv(url).then(function (data) {
     }
 
     md_redChart
-            .width(450)
-            .height(200)
+            .width(500)
+            .height(220)
             .ordinalColors(d3.schemeCategory10)
             .dimension(anoDim)
-            .group(md_redGroup, '5')
-            .x(d3.scaleLinear().domain(["teste"]))
+            .group(md_redGroup)
+          //  .x(d3.scaleLinear().domain(["teste"]))
             .elasticX(true)
             .valueAccessor(function (p) {
                 return p.value.count > 0 ? p.value.total / p.value.count : 0;
             })
             .label(function (d) {
-                if (localEscolaChart.hasFilter() && !localEscolaChart.hasFilter(d.key)) {
-                    return d.key + '(0%)';
-                }
                 var label = d.key;
                 if (all.value()) {
                     label += ' (' + (d.value.total / d.value.count).toFixed(2) + ')';
                 }
                 return label;
-            })
+            });
+            
     md_objChart
-            .width(450)
-            .height(200)
+            .width(500)
+            .height(220)
             .ordinalColors(d3.schemeCategory10)
             .dimension(anoDim)
-            .group(notaPorGrupoGroup, '6')
-            .x(d3.scaleLinear().domain(["teste"]))
+            .group(notaPorGrupoGroup)
+          //  .x(d3.scaleLinear().domain(["teste"]))
             .elasticX(true)
             .valueAccessor(function (p) {
                 return p.value.count > 0 ? p.value.total / p.value.count : 0;
             })
             .label(function (d) {
-                if (localEscolaChart.hasFilter() && !localEscolaChart.hasFilter(d.key)) {
-                    return d.key + '(0%)';
-                }
                 var label = d.key;
                 if (all.value()) {
                     label += ' (' + (d.value.total / d.value.count).toFixed(2) + ')';
                 }
                 return label;
-            })
+            });
 
 //// 
 
@@ -289,9 +291,9 @@ d3.csv(url).then(function (data) {
     );
 
     evoLineObjChart
-            .width(450)
-            .height(200)
-            .margins({top: 10, right: 20, bottom: 30, left: 50})
+            .width(500)
+            .height(220)
+            //  .margins({top: 10, right: 20, bottom: 30, left: 50})
             .x(d3.scaleBand())
             .elasticY(true)
             .xUnits(dc.units.ordinal)
@@ -308,9 +310,9 @@ d3.csv(url).then(function (data) {
             })
 
     evoLineRedChart
-            .width(450)
-            .height(200)
-            .margins({top: 10, right: 20, bottom: 30, left: 50})
+            .width(500)
+            .height(220)
+            //  .margins({top: 10, right: 20, bottom: 30, left: 50})
             .x(d3.scaleBand())
             .elasticY(true)
             .xUnits(dc.units.ordinal)

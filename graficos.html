@@ -2,10 +2,15 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Microdados Enem - Anos 2009 à 2016</title>
-        <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <title>Microdados Enem - Anos 2009 a 2017</title>
         <link href="css/site.css" rel="stylesheet" type="text/css"/>
         <link href="css/dc.css" rel="stylesheet" type="text/css"/>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     </head>
     <body>
         <div class="wrapper">
@@ -21,7 +26,8 @@
 
             </header>
             <main>    
-                <div class="container">
+                <div class="container"  style="margin: auto;">
+
                     <div  class="row">
                         <h1>Microdados Enem </h1>
 
@@ -34,98 +40,150 @@
                     </div>
 
                     <div class="row">
+
                         <div class="row" id="participacao">
 
-                            <div id="sexoChart">
-                                <strong>Sexo Declarado</strong>
-                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                                <a class="reset" href="javascript:sexoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
-
-                                <div class="clearfix"></div>
+                            <div class="col-md-4">
+                                <div id="sexoChart">
+                                    <strong>Sexo Declarado</strong>
+                                    <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                    <a class="reset" href="javascript:sexoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
 
-
-                            <div id="tipoEscolaChart">
-                                <strong>Administração da Escola</strong>
-                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                                <a class="reset" href="javascript:tipoEscolaChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
-
-                                <div class="clearfix"></div>
+                            <div class="col-md-4">
+                                <div id="tipoEscolaChart" class="col-7">
+                                    <strong>Administração da Escola</strong>
+                                    <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                    <a class="reset" href="javascript:tipoEscolaChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
 
-                            <div id="localEscolaChart">
-                                <strong>Local da Escola</strong>
-                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                                <a class="reset" href="javascript:localEscolaChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
-
-                                <div class="clearfix"></div>
+                            <div class="col-md-4">
+                                <div id="localEscolaChart">
+                                    <strong>Local da Escola</strong>
+                                    <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                    <a class="reset" href="javascript:localEscolaChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div id="anoChart" class="col-4">
-                                <strong>Numero de concluintes a cada ano.</strong>
-                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                                <a class="reset" href="javascript:anoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
-                                <div class="clearfix"></div>
-                            </div>      
 
-                            <div id="numporEstadoChart" class="col-8">
-                                <strong>Numero de concluintes a Por Estado</strong>
-                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                                <a class="reset" href="javascript:numporEstadoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
-                                <div class="clearfix"></div>
-                            </div>  
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div id="anoChart" >
+                                    <strong>Numero de concluintes a cada ano (*).</strong>
+                                    <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                    <a class="reset" href="javascript:anoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                    <div class="clearfix"></div>
+                                </div>                                
+                            </div>
+
+                            <div class="col-md-8">
+                                <div id="numporEstadoChart">
+                                    <strong>Numero de concluintes a Por Estado</strong>
+                                    <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                    <a class="reset" href="javascript:numporEstadoChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                    <div class="clearfix"></div>
+                                </div>  
+                            </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" style="margin-left: 20px;">
+                            <a  data-toggle="modal" data-target="#exampleModal">(*) Considerando as regras ...</a>
+                        </div>
+
+                        <div class="row" style="margin: 20px;">
+
                             <label>Entre com o Codigo da escola <span style="font-size: 10px"> ( Exemplo: IFPA = 15588947 ) </span></label>
                             <input id="codEscola" type="number">                            
                             <button id="btnEntrar" type="button" style="margin-bottom: 8px;" class="btn btn-primary">Entrar</button> 
                             <button id="btnLimpar" type="button" style="margin-bottom: 8px;" class="btn btn-danger">Limpar</button> 
+
                         </div>
 
                         <div class="row">
-                            <div id="md_objChart" class="col-6">
-                                <strong>Media da Nota das Provas Obj</strong>
-                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                                <a class="reset" href="javascript:md_objChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
-                                <div class="clearfix"></div>
+                            <div  class="col-md-6">                                
+                                <div id="md_objChart">
+                                    <strong>Media da Nota das Provas Obj</strong>
+                                    <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                    <a class="reset" href="javascript:md_objChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
-                            <div id="evoLineObjChart" class="col-6">
-                                <strong>Evolução das notas Por Ano</strong>
-                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                                <a class="reset" href="javascript:evoLineObjChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
 
-                        <div class="row>">
-                            <div id="md_redChart" class="col-6">
-                                <strong>Média da nota de Redação</strong>
-                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                                <a class="reset" href="javascript:md_redChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
-                                <div class="clearfix"></div>
-                            </div> 
-
-                            <div id="evoLineRedChart" class="col-6">
-                                <strong>Evolução das notas Por Ano</strong>
-                                <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
-                                <a class="reset" href="javascript:evoLineRedChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
-                                <div class="clearfix"></div>
+                            <div  class="col-md-6">  
+                                <div id="evoLineObjChart">
+                                    <strong>Evolução das notas Por Ano</strong>
+                                    <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                    <a class="reset" href="javascript:evoLineObjChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
                         </div>
 
-                    </div>  
-                </div>              
+                        <div class="row">
+                            <div  class="col-md-6">  
+                                <div id="md_redChart">
+                                    <strong>Média da nota de Redação</strong>
+                                    <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                    <a class="reset" href="javascript:md_redChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+
+                            <div  class="col-md-6">  
+                                <div id="evoLineRedChart">
+                                    <strong>Evolução das notas Por Ano</strong>
+                                    <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+                                    <a class="reset" href="javascript:evoLineRedChart.filterAll();dc.redrawAll();" style="display: none;">resetar</a>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+
+                    </div>   
+                </div>
             </main>
             <footer>
 
             </footer>   
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Regras Adotadas</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <pre>
+A) os registros de inscritos presentes nas provas, 
+B) que estejam na condição de aluno concluinte, isto é:
+   (tp_st_conclusao = '2', onde '2'=Esta cursando e concluira o
+   Ensino Médio no ano do ENEM), e  
+C) somente escolas com mais de 10 alunos que estiveram presentes nas provas.
+                        </pre>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <script src="js/crossfilter.js" type="text/javascript"></script>
         <script src="js/d3.js" type="text/javascript"></script>
         <script src="js/dc.js" type="text/javascript"></script>
         <script src="js/app.js" type="text/javascript"></script>
+
     </body>
 </html>
